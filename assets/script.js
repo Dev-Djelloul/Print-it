@@ -1,103 +1,87 @@
 const slides = [
-	{
-		"image":"slide1.jpg",
-		"tagLine":"Impressions tous formats <span>en boutique et en ligne</span>"
-	},
-	{
-		"image":"slide2.jpg",
-		"tagLine":"Tirages haute définition grand format <span>pour vos bureaux et events</span>"
-	},
-	{
-		"image":"slide3.jpg",
-		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
-	},
-	{
-		"image":"slide4.png",
-		"tagLine":"Autocollants <span>avec découpe laser sur mesure</span>"
-	}
-]
+  {
+    image: "slide1.jpeg",
+    tagLine: "Impressions tous formats <span>en boutique et en ligne</span>",
+  },
+  {
+    image: "slide2.jpeg",
+    tagLine:
+      "Tirages haute définition grand format <span>pour vos bureaux et events</span>",
+  },
+  {
+    image: "slide3.jpeg",
+    tagLine: "Grand choix de couleurs <span>de CMJN aux pantones</span>",
+  },
+  {
+    image: "slide4.png",
+    tagLine: "Autocollants <span>avec découpe laser sur mesure</span>",
+  },
+];
 
-// Sélectionner les images des flèches par leurs classes
-const flecheGaucheImg = document.querySelector('.arrow_left');
-const flecheDroiteImg = document.querySelector('.arrow_right');
+ // Sélection des éléments des flèches
+const arrowLeft = document.querySelector('.arrow_left');
+const arrowRight = document.querySelector('.arrow_right');
 
-// Ajouter un event listener pour la flèche gauche
-flecheGaucheImg.addEventListener('click', (event) => {
-  // Vérifier si le clic provient du bouton gauche de la souris (valeur 0)
-  if (event.button === 0) {
-    console.log("Flèche Gauche cliquée !");
-    alert("Flèche Gauche cliquée !");
-  }
+// Fonction de gestionnaire d'événement pour le clic sur la flèche gauche
+arrowLeft.addEventListener('click', () => {
+  console.log('Flèche gauche cliquée');
+  // Ici, vous pouvez mettre votre logique pour afficher la diapositive précédente
 });
 
-// Ajouter un event listener pour la flèche droite
-flecheDroiteImg.addEventListener('click', (event) => {
-  // Vérifier si le clic provient du bouton gauche de la souris (valeur 2)
-  if (event.button === 0) {
-    console.log("Flèche Droite cliquée !");
-    alert("Flèche Droite cliquée !");
-  }
+// Fonction de gestionnaire d'événement pour le clic sur la flèche droite
+arrowRight.addEventListener('click', () => {
+  console.log('Flèche droite cliquée');
+  // Ici, vous pouvez mettre votre logique pour afficher la diapositive suivante
 });
 
 
 
+const dots = document.querySelectorAll('.dot');
 
-// Sélectionner les images du carrousel par leurs balises img
-const images = document.querySelectorAll('#banner img');
-
-// Sélectionner les bullet points par leurs classes
-const bullets = document.querySelectorAll('.dot');
-
-// Sélectionner le texte correspondant à l'image
-const imageText = document.getElementById('image-text');
-
-// Index de l'image actuellement affichée
-let currentImageIndex = 0;
-
-
-// Ajouter un event listener pour la flèche gauche
-document.querySelector('.arrow_left').addEventListener('click', () => {
-	// Cacher l'image actuellement affichée
-	images[currentImageIndex].style.display = 'none';
-  
-	// Mettre à jour l'index de l'image actuellement affichée et gérer les débordements
-	currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-  
-	// Afficher la nouvelle image
-	images[currentImageIndex].style.display = 'block';
-  
-	// Mettre à jour le bullet point actif
-	bullets.forEach((bullet, index) => {
-	  bullet.classList.toggle('dot_selected', index === currentImageIndex);
-	});
-  
-	// Mettre à jour le texte correspondant à l'image
-	updateImageText();
+function updateActiveDot(activeIndex) {
+  dots.forEach((dot, index) => {
+    if (index === activeIndex) {
+      dot.classList.add('dot_selected');
+    } else {
+      dot.classList.remove('dot_selected');
+    }
   });
-  
-
-// Ajouter un event listener pour la flèche droite
-document.querySelector('.arrow_right').addEventListener('click', () => {
-  // Cacher l'image actuellement affichée
-  images[currentImageIndex].style.display = 'none';
-
-  // Mettre à jour l'index de l'image actuellement affichée et gérer les débordements
-  currentImageIndex = (currentImageIndex + 1) % images.length;
-
-  // Afficher la nouvelle image
-  images[currentImageIndex].style.display = 'block';
-
-  // Mettre à jour le bullet point actif
-  bullets.forEach((bullet, index) => {
-    bullet.classList.toggle('dot_selected', index === currentImageIndex);
-  });
-
-  // Mettre à jour le texte correspondant à l'image
-  updateImageText();
-});
-
-// Fonction pour mettre à jour le texte correspondant à l'image
-function updateImageText() {
-  const tagLine = images[currentImageIndex].getAttribute('tagLine');
-  imageText.innerHTML = `<p>${tagLine}</p>`;
 }
+
+
+
+
+let currentSlideIndex = 0; // Indice de la diapositive actuelle
+
+// Fonction pour mettre à jour la diapositive en cours
+function updateSlide(index) {
+  const bannerImg = document.querySelector('.banner-img');
+  const tagLine = document.querySelector('.tag-line');
+
+  bannerImg.src = `./assets/images/slideshow/${slides[index].image}`;
+  tagLine.innerHTML = slides[index].tagLine;
+
+  updateActiveDot(index); // Mettre à jour le point actif
+}
+
+// Fonction pour gérer les changements de diapositives
+function changeSlide(direction) {
+  if (direction === 'next') {
+    currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+  } else if (direction === 'prev') {
+    currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+  }
+
+  updateSlide(currentSlideIndex);
+}
+
+// Écouteur d'événement pour la flèche droite
+arrowRight.addEventListener('click', () => {
+  changeSlide('next');
+});
+
+// Écouteur d'événement pour la flèche gauche
+arrowLeft.addEventListener('click', () => {
+  changeSlide('prev');
+});
+
