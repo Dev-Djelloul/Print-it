@@ -1,3 +1,4 @@
+// Tableau d'index courant
 const slides = [
   {
     image: "slide1.jpeg",
@@ -18,70 +19,67 @@ const slides = [
   },
 ];
 
- // Sélection des éléments des flèches
-const arrowLeft = document.querySelector('.arrow_left');
-const arrowRight = document.querySelector('.arrow_right');
+// Sélection des éléments des flèches
+const arrowLeft = document.querySelector(".arrow_left");
+const arrowRight = document.querySelector(".arrow_right");
 
 // Fonction de gestionnaire d'événement pour le clic sur la flèche gauche
-arrowLeft.addEventListener('click', () => {
-  console.log('Flèche gauche cliquée');
-  // Ici, vous pouvez mettre votre logique pour afficher la diapositive précédente
+arrowLeft.addEventListener("click", () => {
+  console.log("Flèche gauche cliquée");
 });
 
 // Fonction de gestionnaire d'événement pour le clic sur la flèche droite
-arrowRight.addEventListener('click', () => {
-  console.log('Flèche droite cliquée');
-  // Ici, vous pouvez mettre votre logique pour afficher la diapositive suivante
+arrowRight.addEventListener("click", () => {
+  console.log("Flèche droite cliquée");
 });
 
-
-
-const dots = document.querySelectorAll('.dot');
-
-function updateActiveDot(activeIndex) {
-  dots.forEach((dot, index) => {
-    if (index === activeIndex) {
-      dot.classList.add('dot_selected');
-    } else {
-      dot.classList.remove('dot_selected');
-    }
-  });
-}
-
-
-
-
-let currentSlideIndex = 0; // Indice de la diapositive actuelle
+// Variable de l'index de la diapositive actuelle
+let currentSlideIndex = 0;
 
 // Fonction pour mettre à jour la diapositive en cours
 function updateSlide(index) {
-  const bannerImg = document.querySelector('.banner-img');
-  const tagLine = document.querySelector('.tag-line');
+  const bannerImg = document.querySelector(".banner-img");
+  const tagLine = document.querySelector("#banner p");
 
   bannerImg.src = `./assets/images/slideshow/${slides[index].image}`;
   tagLine.innerHTML = slides[index].tagLine;
-
-  updateActiveDot(index); // Mettre à jour le point actif
 }
 
 // Fonction pour gérer les changements de diapositives
 function changeSlide(direction) {
-  if (direction === 'next') {
+  if (direction === "next") {
     currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-  } else if (direction === 'prev') {
+  } else if (direction === "prev") {
     currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
   }
 
+  // Mettre à jour l'affichage en fonction du nouvel index
   updateSlide(currentSlideIndex);
+
+  // Mettre à jour le point actif
+  updateActiveDot(currentSlideIndex);
+}
+
+// Sélection des éléments bullets points
+const dots = document.querySelectorAll(".dot");
+
+// Fonction pour gérer l'affichage du bullet point actif
+function updateActiveDot(currentSlideIndex) {
+  dots.forEach((dot, index) => {
+    if (index === currentSlideIndex) {
+      dot.classList.add("dot_selected");
+    } else {
+      dot.classList.remove("dot_selected");
+    }
+  });
 }
 
 // Écouteur d'événement pour la flèche droite
-arrowRight.addEventListener('click', () => {
-  changeSlide('next');
+arrowRight.addEventListener("click", () => {
+  changeSlide("next");
 });
 
 // Écouteur d'événement pour la flèche gauche
-arrowLeft.addEventListener('click', () => {
-  changeSlide('prev');
+arrowLeft.addEventListener("click", () => {
+  changeSlide("prev");
 });
-
